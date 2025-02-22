@@ -269,46 +269,24 @@ def generate(model,
              backend,
              desc):
     """
-    Generates target sequences for the given source sequences using the model, based on argmax decoding.
-    Note that it runs generation on examples one-by-one instead of in a batched manner.
-
-    Parameters:
-    - model: The model used for generation.
-    - examples: The dataset examples containing source sequences.
-    - src_key: The key for accessing source texts in the examples.
-    - tgt_key: The key for accessing target texts in the examples.
-    - tokenizer: The tokenizer used for encoding texts.
-    - model_max_length: The maximum sequence length the model can handle.
-    - backend: The backend of minitorch tensors.
-    - desc: Description for the generation process (used in progress bars).
-
-    Returns:
-    - A list of generated target sequences.
+    生成目标序列。
     """
-
     model.eval()
     gen_sents = []
     for example in tqdm.tqdm(examples, desc=f'Generating {desc}'):
-        # Run generation for every single example
-
         token_ids = tokenizer(f'{example[src_key]}<eos_{src_key}>')['input_ids']
         len_src = len(token_ids)
 
         while len(token_ids) <= model_max_length:
-            # BEGIN ASSIGN2_2
-            # TODO
-            # run the model with current token_ids, and predict the next token (gen_id)
-            # hint: obtain the logits of next token, and take the argmax.
+            # 运行模型获取预测
             input_tensor = minitorch.tensor([token_ids], backend=backend)
-            
             logits = model(input_tensor)
             
-            last_token_logits = logits[0, -1, :]
+            # 获取最后一个位置的logits，避免使用-1索引
+            last_pos = logits.shape[1] - 1  # 获取最后一个位置的索引
+            last_token_logits = logits[0, last_pos, :]  # 使用正向索引
             
             gen_id = last_token_logits.argmax().item()
-
-            
-            # END ASSIGN2_2
 
             if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
                 break
@@ -342,7 +320,7 @@ def evaluate_bleu(examples, gen_sents, tgt_key):
 def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
          model_max_length=40,
          n_epochs=20,
-         batch_size=64,#128
+         batch_size=32,#128
          learning_rate=0.02,
          samples_per_epoch=20000,
          n_vocab=10000,
