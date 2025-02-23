@@ -14,18 +14,50 @@ from tokenizers import ByteLevelBPETokenizer
 import minitorch
 from minitorch import DecoderLM
 from minitorch.cuda_kernel_ops import CudaKernelOps
+from minitorch.tensor_functions import tensor_from_numpy
 
-
+# def get_dataset(dataset_name, model_max_length):
+#     """
+#     Obtrain IWSLT (de-en) dataset.
+#     """
+#     dataset = {
+#         split: datasets.load_dataset(dataset_name, split=split)['translation']
+#         for split in ['train', 'validation', 'test']
+#     }
+#     src_key, tgt_key = 'de', 'en'
+import zipfile
 def get_dataset(dataset_name, model_max_length):
     """
-    Obtrain IWSLT (de-en) dataset.
+    获取IWSLT (de-en) 数据集。
     """
-    dataset = {
-        split: datasets.load_dataset(dataset_name, split=split)['translation']
-        for split in ['train', 'validation', 'test']
-    }
+    # 解压后的文件应该在 de-en 目录下
+    data_dir = "iwslt14-data/data/de-en/de-en"
     src_key, tgt_key = 'de', 'en'
-
+    
+    dataset = {}
+    for split in ['train', 'valid', 'test']:
+        # 对于验证集，文件名是 valid，但是我们需要用 validation 作为键
+        split_key = 'validation' if split == 'valid' else split
+        
+        # 读取源语言和目标语言文件
+        src_file = os.path.join(data_dir, f"{split}.{src_key}")
+        tgt_file = os.path.join(data_dir, f"{split}.{tgt_key}")
+        
+        if not os.path.exists(src_file) or not os.path.exists(tgt_file):
+            raise FileNotFoundError(f"找不到数据文件: {src_file} 或 {tgt_file}")
+            
+        with open(src_file, 'r', encoding='utf-8') as f_src, \
+             open(tgt_file, 'r', encoding='utf-8') as f_tgt:
+            
+            src_lines = [line.strip() for line in f_src.readlines()]
+            tgt_lines = [line.strip() for line in f_tgt.readlines()]
+            
+            dataset[split_key] = [
+                {src_key: src, tgt_key: tgt}
+                for src, tgt in zip(src_lines, tgt_lines)
+            ]
+    
+    # 过滤长度
     dataset = {
         split: [
             example for example in dataset[split]
@@ -269,29 +301,68 @@ def generate(model,
              backend,
              desc):
     """
-    生成目标序列。
+    Generates target sequences for the given source sequences using the model, based on argmax decoding.
+    Note that it runs generation on examples one-by-one instead of in a batched manner.
+
+    Parameters:
+    - model: The model used for generation.
+    - examples: The dataset examples containing source sequences.
+    - src_key: The key for accessing source texts in the examples.
+    - tgt_key: The key for accessing target texts in the examples.
+    - tokenizer: The tokenizer used for encoding texts.
+    - model_max_length: The maximum sequence length the model can handle.
+    - backend: The backend of minitorch tensors.
+    - desc: Description for the generation process (used in progress bars).
+
+    Returns:
+    - A list of generated target sequences.
     """
+
     model.eval()
     gen_sents = []
     for example in tqdm.tqdm(examples, desc=f'Generating {desc}'):
+        # Run generation for every single example
+
         token_ids = tokenizer(f'{example[src_key]}<eos_{src_key}>')['input_ids']
         len_src = len(token_ids)
 
+
         while len(token_ids) <= model_max_length:
-            # 运行模型获取预测
-            input_tensor = minitorch.tensor([token_ids], backend=backend)
-            logits = model(input_tensor)
+
+            token_ids_tensor = tensor_from_numpy(np.array([token_ids]), backend)
             
-            # 获取最后一个位置的logits，避免使用-1索引
-            last_pos = logits.shape[1] - 1  # 获取最后一个位置的索引
-            last_token_logits = logits[0, last_pos, :]  # 使用正向索引
-            
-            gen_id = last_token_logits.argmax().item()
+            # get logits
+            logits = model(idx=token_ids_tensor)
+            # logits of the last token
+            logits_np = logits.to_numpy()[:, -1, :]
+
+            # get the argmax
+            gen_id = np.argmax(logits_np, axis=-1).item()
 
             if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
                 break
             else:
                 token_ids.append(gen_id)
+        # while len(token_ids) <= model_max_length:
+        #     # BEGIN ASSIGN2_2
+        #     # TODO
+        #     # run the model with current token_ids, and predict the next token (gen_id)
+        #     # hint: obtain the logits of next token, and take the argmax.
+        #     input_tensor = minitorch.tensor([token_ids], backend=backend)
+            
+        #     logits = model(input_tensor)
+            
+        #     last_token_logits = logits[0, -1, :]
+            
+        #     gen_id = last_token_logits.argmax().item()
+
+            
+        #     # END ASSIGN2_2
+
+        #     if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
+        #         break
+        #     else:
+        #         token_ids.append(gen_id)
 
         gen_sents.append(tokenizer.decode(token_ids[len_src:]))
 
@@ -320,9 +391,9 @@ def evaluate_bleu(examples, gen_sents, tgt_key):
 def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
          model_max_length=40,
          n_epochs=20,
-         batch_size=32,#128
+         batch_size=128,#128
          learning_rate=0.02,
-         samples_per_epoch=20000,
+         samples_per_epoch=20000,#20000
          n_vocab=10000,
          n_embd=256,
          seed=11111):
