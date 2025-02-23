@@ -1,0 +1,70 @@
+{
+  "special_tokens": [
+    "<eos_de>",
+    "<pad>",
+    "<eos_en>",
+    "<"
+  ],
+  "german_examples": [
+    {
+      "word": "Haus",
+      "tokens": [
+        "H",
+        "aus"
+      ]
+    },
+    {
+      "word": "Schule",
+      "tokens": [
+        "S",
+        "ch",
+        "ule"
+      ]
+    },
+    {
+      "word": "Leben",
+      "tokens": [
+        "L",
+        "eben"
+      ]
+    },
+    {
+      "word": "Computer",
+      "tokens": [
+        "C",
+        "om",
+        "put",
+        "er"
+      ]
+    }
+  ],
+  "english_examples": [
+    {
+      "word": "house",
+      "tokens": [
+        "house"
+      ]
+    },
+    {
+      "word": "school",
+      "tokens": [
+        "sch",
+        "o",
+        "ol"
+      ]
+    },
+    {
+      "word": "life",
+      "tokens": [
+        "life"
+      ]
+    },
+    {
+      "word": "computer",
+      "tokens": [
+        "comput",
+        "er"
+      ]
+    }
+  ]
+}

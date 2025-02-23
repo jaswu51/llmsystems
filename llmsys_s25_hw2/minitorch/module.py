@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, Optional, Sequence, Tuple
+import numpy as np
 
 
 class Module:
@@ -133,6 +134,56 @@ class Module:
 
         main_str += ")"
         return main_str
+
+    
+    # wuyi
+    def state_dict(self) -> Dict[str, Any]:
+        """Get the module's state dictionary"""
+        state = {}
+        # Save parameters of current module
+        for name, param in self._parameters.items():
+            state[name] = param.value.to_numpy() if hasattr(param.value, 'to_numpy') else param.value
+            
+        # Recursively save parameters of child modules
+        for module_name, module in self._modules.items():
+            module_state = module.state_dict()
+            for param_name, param_value in module_state.items():
+                state[f"{module_name}.{param_name}"] = param_value
+                
+        return state
+
+    # wuyi
+    def load_state_dict(self, state_dict: Dict[str, Any], backend) -> None:
+        """Load a state dictionary into the module"""
+        from minitorch import tensor_from_numpy
+        
+        # Validate parameters
+        current_state = self.state_dict()
+        missing_keys = []
+        unexpected_keys = []
+        
+        # Check if all required keys exist
+        for k in current_state.keys():
+            if k not in state_dict:
+                missing_keys.append(k)
+        
+        # Check for extra keys
+        for k in state_dict.keys():
+            if k not in current_state:
+                unexpected_keys.append(k)
+        
+        if missing_keys:
+            raise ValueError(f"Missing keys in state dict: {missing_keys}")
+        if unexpected_keys:
+            raise ValueError(f"Unexpected keys in state dict: {unexpected_keys}")
+            
+        # Load parameters
+        for name, param in self.named_parameters():
+            if name in state_dict:
+                param_value = state_dict[name]
+                if isinstance(param_value, np.ndarray):
+                    param_value = tensor_from_numpy(param_value, backend=backend)
+                param.update(param_value)
 
 
 class Parameter:
