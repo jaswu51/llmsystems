@@ -16,15 +16,20 @@ from minitorch import DecoderLM
 from minitorch.cuda_kernel_ops import CudaKernelOps
 from minitorch.tensor_functions import tensor_from_numpy
 
+# set proxy, wuyi
 import subprocess
 import os
- 
+import pickle
+import glob
+import shutil
 result = subprocess.run('bash -c "source /etc/network_turbo && env | grep proxy"', shell=True, capture_output=True, text=True)
 output = result.stdout
 for line in output.splitlines():
     if '=' in line:
         var, value = line.split('=', 1)
         os.environ[var] = value
+
+
 
 def get_dataset(dataset_name, model_max_length):
     """
@@ -52,54 +57,6 @@ def get_dataset(dataset_name, model_max_length):
 
     return dataset, src_key, tgt_key
 
-# import zipfile
-# def get_dataset(dataset_name, model_max_length):
-#     """
-#     获取IWSLT (de-en) 数据集。
-#     """
-#     # 解压后的文件应该在 de-en 目录下
-#     data_dir = "iwslt14-data/data/de-en/de-en"
-#     src_key, tgt_key = 'de', 'en'
-    
-#     dataset = {}
-#     for split in ['train', 'valid', 'test']:
-#         # 对于验证集，文件名是 valid，但是我们需要用 validation 作为键
-#         split_key = 'validation' if split == 'valid' else split
-        
-#         # 读取源语言和目标语言文件
-#         src_file = os.path.join(data_dir, f"{split}.{src_key}")
-#         tgt_file = os.path.join(data_dir, f"{split}.{tgt_key}")
-        
-#         if not os.path.exists(src_file) or not os.path.exists(tgt_file):
-#             raise FileNotFoundError(f"找不到数据文件: {src_file} 或 {tgt_file}")
-            
-#         with open(src_file, 'r', encoding='utf-8') as f_src, \
-#              open(tgt_file, 'r', encoding='utf-8') as f_tgt:
-            
-#             src_lines = [line.strip() for line in f_src.readlines()]
-#             tgt_lines = [line.strip() for line in f_tgt.readlines()]
-            
-#             dataset[split_key] = [
-#                 {src_key: src, tgt_key: tgt}
-#                 for src, tgt in zip(src_lines, tgt_lines)
-#             ]
-    
-#     # 过滤长度
-#     dataset = {
-#         split: [
-#             example for example in dataset[split]
-#             if len(example[src_key].split()) + len(
-#                 example[tgt_key].split()) < model_max_length
-#         ] for split in dataset.keys()
-#     }
-
-#     dataset['test'] = dataset['test'][:100]  # 6750
-
-#     print(json.dumps(
-#         {'data_size': {split: len(dataset[split]) for split in dataset.keys()}},
-#         indent=4))
-
-#     return dataset, src_key, tgt_key
 
 
 def get_tokenizer(examples, vocab_size, src_key, tgt_key, workdir):
@@ -198,14 +155,6 @@ def collate_batch(
     input_ids = minitorch.tensor_from_numpy(input_ids, backend=backend)
     labels    = minitorch.tensor_from_numpy(labels, backend=backend)
     label_token_weights = minitorch.tensor_from_numpy(label_token_weights, backend=backend)
-    
-    # input_ids = token_ids[:, :-1].tolist()
-    # labels    = token_ids[:, 1:].tolist()
-    # label_token_weights = tgt_token_mask[:, 1:].tolist()
-
-    # input_ids = minitorch.tensor(input_ids, backend=backend)
-    # labels    = minitorch.tensor(labels, backend=backend)
-    # label_token_weights = minitorch.tensor(label_token_weights, backend=backend)
 
     return {
         'input_ids': input_ids,
@@ -355,7 +304,10 @@ def generate(model,
 
 
         while len(token_ids) <= model_max_length:
-
+            # BEGIN ASSIGN2_2
+            # TODO
+            # run the model with current token_ids, and predict the next token (gen_id)
+            # hint: obtain the logits of next token, and take the argmax.
             token_ids_tensor = tensor_from_numpy(np.array([token_ids]), backend)
             
             # get logits
@@ -365,31 +317,12 @@ def generate(model,
 
             # get the argmax
             gen_id = np.argmax(logits_np, axis=-1).item()
+            # END ASSIGN2_2
 
             if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
                 break
             else:
                 token_ids.append(gen_id)
-        # while len(token_ids) <= model_max_length:
-        #     # BEGIN ASSIGN2_2
-        #     # TODO
-        #     # run the model with current token_ids, and predict the next token (gen_id)
-        #     # hint: obtain the logits of next token, and take the argmax.
-        #     input_tensor = minitorch.tensor([token_ids], backend=backend)
-            
-        #     logits = model(input_tensor)
-            
-        #     last_token_logits = logits[0, -1, :]
-            
-        #     gen_id = last_token_logits.argmax().item()
-
-            
-        #     # END ASSIGN2_2
-
-        #     if gen_id == tokenizer.vocab[f'<eos_{tgt_key}>']:
-        #         break
-        #     else:
-        #         token_ids.append(gen_id)
 
         gen_sents.append(tokenizer.decode(token_ids[len_src:]))
 
@@ -414,6 +347,192 @@ def evaluate_bleu(examples, gen_sents, tgt_key):
             references=[[example[tgt_key] for example in examples]]).score
     }
 
+
+# wuyi
+def get_param_paths(model):
+    """Get paths for all parameters in the model"""
+    param_paths = {}
+    
+    def _get_param_paths(module, prefix=''):
+        for name, param in module._parameters.items():
+            param_paths[id(param)] = f"{prefix}.{name}" if prefix else name
+            
+        for name, child in module._modules.items():
+            child_prefix = f"{prefix}.{name}" if prefix else name
+            _get_param_paths(child, child_prefix)
+    
+    _get_param_paths(model)
+    return param_paths
+
+# wuyi
+def save_checkpoint(model, optimizer, epoch, workdir, backend):
+    """Save model checkpoint"""
+    checkpoint_dir = os.path.join(workdir, 'checkpoints')
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    
+    print("\nPreparing to save checkpoint:")
+    
+    # Get parameter paths
+    param_paths = get_param_paths(model)
+    
+    checkpoint = {
+        'epoch': epoch,
+        'model_state_dict': model.state_dict(),
+        'optimizer_state': {
+            'config': {
+                'lr': optimizer.lr,
+                'beta1': optimizer.beta1,
+                'beta2': optimizer.beta2,
+                'eps': optimizer.eps,
+            },
+            'states': {}
+        },
+        'metadata': {
+            'timestamp': time.time(),
+            'backend': str(backend)
+        }
+    }
+    
+    # Save optimizer states
+    for param in optimizer.parameters:
+        if param.value is not None:
+            param_id = id(param)
+            param_path = param_paths.get(param_id, f"param_{param_id}")
+            print(f"Saving parameter {param_path}: shape={param.value.shape}")
+            
+            param_state = optimizer._states.get(param_id, {})
+            if param_state:
+                checkpoint['optimizer_state']['states'][param_path] = {
+                    'step': param_state['step'],
+                    'exp_avg': param_state['exp_avg'].to_numpy() if param_state.get('exp_avg') is not None else None,
+                    'exp_avg_sq': param_state['exp_avg_sq'].to_numpy() if param_state.get('exp_avg_sq') is not None else None,
+                    'shape': param.value.shape
+                }
+    
+    checkpoint_path = os.path.join(checkpoint_dir, f'checkpoint_epoch_{epoch}.pkl')
+    with open(checkpoint_path, 'wb') as f:
+        pickle.dump(checkpoint, f)
+    
+    print(f"\nSaved {len(checkpoint['optimizer_state']['states'])} parameter states")
+    return checkpoint_path
+
+# wuyi
+def load_checkpoint(model, optimizer, checkpoint_path, backend):
+    """Load model checkpoint"""
+    print(f"\nLoading checkpoint: {checkpoint_path}")
+    
+    with open(checkpoint_path, 'rb') as f:
+        checkpoint = pickle.load(f)
+    
+    # Load model state
+    model.load_state_dict(checkpoint['model_state_dict'], backend)
+    
+    # Load optimizer config
+    optimizer.lr = checkpoint['optimizer_state']['config']['lr']
+    optimizer.beta1 = checkpoint['optimizer_state']['config']['beta1']
+    optimizer.beta2 = checkpoint['optimizer_state']['config']['beta2']
+    optimizer.eps = checkpoint['optimizer_state']['config']['eps']
+    
+    # Get current parameter paths
+    param_paths = get_param_paths(model)
+    
+    # Reset and load optimizer states
+    optimizer._states = {}
+    
+    print("\nLoading optimizer states:")
+    for param in optimizer.parameters:
+        if param.value is not None:
+            param_id = id(param)
+            param_path = param_paths.get(param_id, f"param_{param_id}")
+            print(f"Processing parameter {param_path}: shape={param.value.shape}")
+            
+            # Find matching saved state
+            saved_state = None
+            for saved_path, state in checkpoint['optimizer_state']['states'].items():
+                if state['shape'] == param.value.shape:
+                    saved_state = state
+                    print(f"- Found matching state: {saved_path}")
+                    break
+            
+            if saved_state:
+                optimizer._states[param_id] = {
+                    'step': saved_state['step'],
+                    'exp_avg': tensor_from_numpy(saved_state['exp_avg'], backend=backend) if saved_state['exp_avg'] is not None else param.value.zeros(),
+                    'exp_avg_sq': tensor_from_numpy(saved_state['exp_avg_sq'], backend=backend) if saved_state['exp_avg_sq'] is not None else param.value.zeros()
+                }
+                print("- State loaded")
+            else:
+                # Initialize new state if no matching state found
+                optimizer._states[param_id] = {
+                    'step': 0,
+                    'exp_avg': param.value.zeros(),
+                    'exp_avg_sq': param.value.zeros()
+                }
+                print("- Initialized new state")
+    
+    return checkpoint['epoch']
+
+# wuyi
+def find_latest_checkpoint(workdir):
+    """Find the latest checkpoint file"""
+    checkpoint_dir = os.path.join(workdir, 'checkpoints')
+    if not os.path.exists(checkpoint_dir):
+        return None
+        
+    checkpoints = glob.glob(os.path.join(checkpoint_dir, 'checkpoint_epoch_*.pkl'))
+    if not checkpoints:
+        return None
+        
+    # Sort by modification time
+    latest_checkpoint = max(checkpoints, key=os.path.getmtime)
+    return latest_checkpoint
+
+# wuyi
+def verify_checkpoint(checkpoint_path):
+    """Verify checkpoint file integrity"""
+    try:
+        with open(checkpoint_path, 'rb') as f:
+            checkpoint = pickle.load(f)
+            
+        # Verify basic structure
+        required_keys = ['epoch', 'model_state_dict', 'optimizer_state', 'metadata']
+        for key in required_keys:
+            if key not in checkpoint:
+                raise ValueError(f"Missing required key in checkpoint: {key}")
+                
+        # Verify parameter shapes
+        for name, param in checkpoint['model_state_dict'].items():
+            if not isinstance(param, np.ndarray):
+                raise ValueError(f"Parameter {name} is not a numpy array")
+                
+        # Verify optimizer state
+        if 'states' not in checkpoint['optimizer_state']:
+            raise ValueError("Invalid optimizer state format")
+            
+        return True, "Checkpoint verification passed"
+    except Exception as e:
+        return False, f"Checkpoint verification failed: {str(e)}"
+
+# wuyi
+def backup_checkpoint(checkpoint_path, max_backups=3):
+    """Create backup of checkpoint file"""
+    backup_dir = os.path.join(os.path.dirname(checkpoint_path), 'backups')
+    os.makedirs(backup_dir, exist_ok=True)
+    
+    # Create timestamped backup
+    timestamp = time.strftime('%Y%m%d_%H%M%S')
+    backup_path = os.path.join(
+        backup_dir, 
+        f"{os.path.basename(checkpoint_path)}.{timestamp}"
+    )
+    
+    shutil.copy2(checkpoint_path, backup_path)
+    
+    # Keep backup count within limit
+    backups = sorted(glob.glob(os.path.join(backup_dir, '*.pkl.*')))
+    while len(backups) > max_backups:
+        os.remove(backups[0])
+        backups = backups[1:]
 
 def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
          model_max_length=40,
@@ -479,8 +598,17 @@ def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
         model_max_length=model_max_length,
         backend=backend)
 
-    for epoch_idx in range(n_epochs):
-        desc = f'epoch {epoch_idx} / {n_epochs}'
+    # Find latest checkpoint, wuyi
+    checkpoint_path = find_latest_checkpoint(workdir)
+    if checkpoint_path:
+        print(f"Resuming training from checkpoint: {checkpoint_path}")
+        start_epoch = load_checkpoint(model, optimizer, checkpoint_path, backend)
+    else:
+        print("Starting training from scratch")
+        start_epoch = 0
+    # for epoch in range(start_epoch, start_epoch+2):
+    for epoch in range(start_epoch, n_epochs):
+        desc = f'epoch {epoch} / {n_epochs}'
 
         train(
             model=model,
@@ -498,7 +626,7 @@ def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
             collate_fn=collate_fn,
             desc=desc)
 
-        print(f'Epoch {epoch_idx}: Validation Loss = {validation_loss}')
+        print(f'Epoch {epoch}: Validation Loss = {validation_loss}')
 
         gen_sents = generate(
             model=model,
@@ -514,15 +642,21 @@ def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
         for example, gen_sent in zip(dataset['test'], gen_sents):
             gen_examples.append({'example': example, 'gen': gen_sent})
         json.dump(gen_examples, open(
-            f'{workdir}/gen_epoch{epoch_idx}.json', 'w'), indent=4)
+            f'{workdir}/gen_epoch{epoch}.json', 'w'), indent=4)
 
         eval_scores = evaluate_bleu(
             examples=dataset['test'], gen_sents=gen_sents, tgt_key=tgt_key)
-        print(f'Epoch {epoch_idx}: {eval_scores}')
+        print(f'Epoch {epoch}: {eval_scores}')
 
         json.dump(
             {'validation_loss': float(validation_loss), **eval_scores},
-            open(f'{workdir}/eval_results_epoch{epoch_idx}.json', 'w'))
+            open(f'{workdir}/eval_results_epoch{epoch}.json', 'w'))
+
+        # save checkpoint for each epoch, wuyi
+        try:
+            save_checkpoint(model, optimizer, epoch + 1, workdir, backend)
+        except Exception as e:
+            print(f"Failed to save checkpoint: {e}")
 
 
 if __name__ == '__main__':
