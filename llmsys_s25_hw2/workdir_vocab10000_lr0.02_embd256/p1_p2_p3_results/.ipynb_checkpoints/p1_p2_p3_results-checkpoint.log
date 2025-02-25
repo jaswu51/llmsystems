@@ -1,0 +1,189 @@
+(minitorch) root@autodl-container-e0854686a9-e406acdf:~/llmsystems/llmsys_s25_hw2# python -m pytest -l -v -k "test_logsumexp_student"
+python -m pytest -l -v -k "test_softmax_loss_student"
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 205 deselected / 3 selected                                                                                                                                                                                 
+
+tests/test_nn_student.py::test_logsumexp_student[CudaKernelOps-sizes0] PASSED                                                                                                                                               [ 33%]
+tests/test_nn_student.py::test_logsumexp_student[CudaKernelOps-sizes1] PASSED                                                                                                                                               [ 66%]
+tests/test_nn_student.py::test_logsumexp_student[CudaKernelOps-sizes2] PASSED                                                                                                                                               [100%]
+
+================================================================================================ 3 passed, 205 deselected in 2.52s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 196 deselected / 12 selected                                                                                                                                                                                
+
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-2-1] PASSED                                                                                                                                               [  8%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-2-64] PASSED                                                                                                                                              [ 16%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-2-256] PASSED                                                                                                                                             [ 25%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-32-1] PASSED                                                                                                                                              [ 33%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-32-64] PASSED                                                                                                                                             [ 41%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-32-256] PASSED                                                                                                                                            [ 50%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-128-1] PASSED                                                                                                                                             [ 58%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-128-64] PASSED                                                                                                                                            [ 66%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-128-256] PASSED                                                                                                                                           [ 75%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-10000-1] PASSED                                                                                                                                           [ 83%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-10000-64] PASSED                                                                                                                                          [ 91%]
+tests/test_nn_student.py::test_softmax_loss_student[CudaKernelOps-10000-256] PASSED                                                                                                                                         [100%]
+
+=============================================================================================== 12 passed, 196 deselected in 3.29s ================================================================================================
+(minitorch) root@autodl-container-e0854686a9-e406acdf:~/llmsystems/llmsys_s25_hw2# python -m pytest -l -v -k "test_linear_student"
+python -m pytest -l -v -k "test_dropout_student"
+python -m pytest -l -v -k "test_layernorm_student"
+python -m pytest -l -v -k "test_embedding_student"
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 202 deselected / 6 selected                                                                                                                                                                                 
+
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-False-sizes0] PASSED                                                                                                                                 [ 16%]
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-False-sizes1] PASSED                                                                                                                                 [ 33%]
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-False-sizes2] PASSED                                                                                                                                 [ 50%]
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-True-sizes0] PASSED                                                                                                                                  [ 66%]
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-True-sizes1] PASSED                                                                                                                                  [ 83%]
+tests/test_modules_basic_student.py::test_linear_student[CudaKernelOps-True-sizes2] PASSED                                                                                                                                  [100%]
+
+================================================================================================ 6 passed, 202 deselected in 2.63s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 207 deselected / 1 selected                                                                                                                                                                                 
+
+tests/test_modules_basic_student.py::test_dropout_student[CudaKernelOps] PASSED                                                                                                                                             [100%]
+
+================================================================================================ 1 passed, 207 deselected in 2.47s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 202 deselected / 6 selected                                                                                                                                                                                 
+
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-3-1] PASSED                                                                                                                                 [ 16%]
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-3-64] PASSED                                                                                                                                [ 33%]
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-128-1] PASSED                                                                                                                               [ 50%]
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-128-64] PASSED                                                                                                                              [ 66%]
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-256-1] PASSED                                                                                                                               [ 83%]
+tests/test_modules_basic_student.py::test_layernorm_student[CudaKernelOps-1e-05-256-64] PASSED                                                                                                                              [100%]
+
+================================================================================================ 6 passed, 202 deselected in 2.70s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 200 deselected / 8 selected                                                                                                                                                                                 
+
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-1-3-1] PASSED                                                                                                                                 [ 12%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-1-3-5] PASSED                                                                                                                                 [ 25%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-1-200-1] PASSED                                                                                                                               [ 37%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-1-200-5] PASSED                                                                                                                               [ 50%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-50-3-1] PASSED                                                                                                                                [ 62%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-50-3-5] PASSED                                                                                                                                [ 75%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-50-200-1] PASSED                                                                                                                              [ 87%]
+tests/test_modules_basic_student.py::test_embedding_student[CudaKernelOps-256-50-200-5] PASSED                                                                                                                              [100%]
+
+================================================================================================ 8 passed, 200 deselected in 2.65s ================================================================================================
+(minitorch) root@autodl-container-e0854686a9-e406acdf:~/llmsystems/llmsys_s25_hw2# python -m pytest -l -v -k "test_multihead_attention_student"
+python -m pytest -l -v -k "test_transformer_layer_1_student"
+python -m pytest -l -v -k "test_transformer_layer_2_student"
+python -m pytest -l -v -k "test_decoder_lm_student"
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 184 deselected / 24 selected                                                                                                                                                                                
+
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-64-32-1] PASSED                                                                                                             [  4%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-64-32-128] PASSED                                                                                                           [  8%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-64-40-1] PASSED                                                                                                             [ 12%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-64-40-128] PASSED                                                                                                           [ 16%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-256-32-1] PASSED                                                                                                            [ 20%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-256-32-128] PASSED                                                                                                          [ 25%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-256-40-1] PASSED                                                                                                            [ 29%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-1-256-40-128] PASSED                                                                                                          [ 33%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-64-32-1] PASSED                                                                                                             [ 37%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-64-32-128] PASSED                                                                                                           [ 41%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-64-40-1] PASSED                                                                                                             [ 45%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-64-40-128] PASSED                                                                                                           [ 50%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-256-32-1] PASSED                                                                                                            [ 54%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-256-32-128] PASSED                                                                                                          [ 58%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-256-40-1] PASSED                                                                                                            [ 62%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-4-256-40-128] PASSED                                                                                                          [ 66%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-64-32-1] PASSED                                                                                                             [ 70%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-64-32-128] PASSED                                                                                                           [ 75%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-64-40-1] PASSED                                                                                                             [ 79%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-64-40-128] PASSED                                                                                                           [ 83%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-256-32-1] PASSED                                                                                                            [ 87%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-256-32-128] PASSED                                                                                                          [ 91%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-256-40-1] PASSED                                                                                                            [ 95%]
+tests/test_modules_transformer_student.py::test_multihead_attention_student[CudaKernelOps-0.0-8-256-40-128] PASSED                                                                                                          [100%]
+
+=============================================================================================== 24 passed, 184 deselected in 9.86s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 207 deselected / 1 selected                                                                                                                                                                                 
+
+tests/test_modules_transformer_student.py::test_transformer_layer_1_student[CudaKernelOps-False-1e-05-0.0-8-256-40-128] PASSED                                                                                              [100%]
+
+================================================================================================ 1 passed, 207 deselected in 4.10s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 192 deselected / 16 selected                                                                                                                                                                                
+
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-16-4-2] PASSED                                                                                                  [  6%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-16-4-4] PASSED                                                                                                  [ 12%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-16-32-2] PASSED                                                                                                 [ 18%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-16-32-4] PASSED                                                                                                 [ 25%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-32-4-2] PASSED                                                                                                  [ 31%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-32-4-4] PASSED                                                                                                  [ 37%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-32-32-2] PASSED                                                                                                 [ 43%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-1-32-32-4] PASSED                                                                                                 [ 50%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-16-4-2] PASSED                                                                                                  [ 56%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-16-4-4] PASSED                                                                                                  [ 62%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-16-32-2] PASSED                                                                                                 [ 68%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-16-32-4] PASSED                                                                                                 [ 75%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-32-4-2] PASSED                                                                                                  [ 81%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-32-4-4] PASSED                                                                                                  [ 87%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-32-32-2] PASSED                                                                                                 [ 93%]
+tests/test_modules_transformer_student.py::test_transformer_layer_2_student[CudaKernelOps-False-1e-05-0.0-8-32-32-4] PASSED                                                                                                 [100%]
+
+=============================================================================================== 16 passed, 192 deselected in 4.33s ================================================================================================
+======================================================================================================= test session starts =======================================================================================================
+platform linux -- Python 3.10.16, pytest-7.1.2, pluggy-1.5.0 -- /root/miniconda3/envs/minitorch/bin/python
+cachedir: .pytest_cache
+hypothesis profile 'default' -> database=DirectoryBasedExampleDatabase('/root/llmsystems/llmsys_s25_hw2/.hypothesis/examples')
+rootdir: /root/llmsystems/llmsys_s25_hw2, configfile: pytest.ini
+plugins: hypothesis-6.54.0, env-0.6.2
+collected 208 items / 207 deselected / 1 selected                                                                                                                                                                                 
+
+tests/test_modules_transformer_student.py::test_decoder_lm_student[CudaKernelOps-True-1e-05-0.0-40-8-256-1000-40-128] PASSED                                                                                                [100%]
+
+================================================================================================ 1 passed, 207 deselected in 9.56s ================================================================================================
+(minitorch) root@autodl-container-e0854686a9-e406acdf:~/llmsystems/llmsys_s25_hw2# 

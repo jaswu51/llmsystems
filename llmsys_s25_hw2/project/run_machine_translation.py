@@ -606,7 +606,7 @@ def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
     else:
         print("Starting training from scratch")
         start_epoch = 0
-        
+    # for epoch in range(start_epoch, start_epoch+2):
     for epoch in range(start_epoch, n_epochs):
         desc = f'epoch {epoch} / {n_epochs}'
 
