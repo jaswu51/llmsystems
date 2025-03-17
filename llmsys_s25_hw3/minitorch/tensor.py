@@ -401,6 +401,7 @@ class Tensor:
         assert h.last_fn is not None
         assert h.ctx is not None
 
+
         x = h.last_fn._backward(h.ctx, d_output)
         assert len(x) == len(h.inputs), f"Bug in function {h.last_fn}"
         return [

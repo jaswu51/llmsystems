@@ -120,7 +120,6 @@ class Mul(Function):
         )
         # END ASSIGN2.4
 
-
 class PowerScalar(Function):
     @staticmethod
     def forward(ctx: Context, a: Tensor, scalar: Tensor) -> Tensor:
@@ -141,8 +140,11 @@ class PowerScalar(Function):
             output : Tensor
                 Tensor containing the result of raising every element of a to scalar.
         """
-        # COPY FROM ASSIGN2_1
-        raise NotImplementedError
+        ### BEGIN YOUR SOLUTION
+        out = a.f.pow_scalar_zip(a, scalar)
+        ctx.save_for_backward(a, scalar)
+        return out
+        ### END YOUR SOLUTION
 
     @staticmethod
     def backward(ctx: Context, grad_output: Tensor) -> Tuple[Tensor, float]:
@@ -166,8 +168,9 @@ class PowerScalar(Function):
         a, scalar = ctx.saved_values
         grad_a    = None
         
-        # COPY FROM ASSIGN2_1
-        raise NotImplementedError
+        ### BEGIN YOUR SOLUTION
+        grad_a = grad_output * (scalar * (a ** (scalar - 1)))
+        ### END YOUR SOLUTION
 
         return (grad_a, 0.0)
 
@@ -418,40 +421,36 @@ class MatMul(Function):
 class Attn_Softmax(Function):
     @staticmethod
     def forward(ctx: Context, inp: Tensor, mask: Tensor) -> Tensor:
-        # BEGIN ASSIGN3_1
-        # Save input for backward pass
-        ctx.save_for_backward(inp)
-        
-        # Call CUDA kernel operation for forward pass
-        out = inp.f.attn_softmax_fw(inp, mask)
-        return out
-        # END ASSIGN3_1
+      #   BEGIN ASSIGN3_1 
+      import copy
+      soft_input = inp.f.attn_softmax_fw(inp, mask)
+      ctx.save_for_backward(copy.deepcopy(soft_input), mask)
+      return soft_input
+      #   END ASSIGN3_1
 
     @staticmethod
     def backward(ctx: Context, out_grad: Tensor) -> Tensor:
-        # BEGIN ASSIGN3_1
-        # Get saved forward pass input
-        (inp,) = ctx.saved_values
-        
-        # Call CUDA kernel operation for backward pass
-        inp_grad = out_grad.f.attn_softmax_bw(out_grad, inp)
-        
-        # Since mask has no gradient in backward pass, return None as the gradient for mask
-        return inp_grad, None
-        # END ASSIGN3_1
+      #   BEGIN ASSIGN3_1 
+      (soft_input,mask) = ctx.saved_values
+      return out_grad.f.attn_softmax_bw(out_grad, soft_input), mask.zeros(mask.shape)
+      #   END ASSIGN3_1
 
 
 class LayerNorm(Function):
     @staticmethod
     def forward(ctx: Context, inp: Tensor, gamma: Tensor, beta: Tensor) -> Tensor:
       #   BEGIN ASSIGN3_2 
-      raise NotImplementedError("Need to implement for Assignment 3")
+      out, vars, means = inp.f.layernorm_fw(inp, gamma, beta)
+      ctx.save_for_backward(inp, gamma, beta, vars, means)
+      return out
       #   END ASSIGN3_2
 
     @staticmethod
     def backward(ctx: Context, out_grad: Tensor) -> Tensor:
       #   BEGIN ASSIGN3_2
-      raise NotImplementedError("Need to implement for Assignment 3")
+        inp, gamma, beta, vars, means = ctx.saved_values
+        inp_grad, gamma_grad, betta_grad = inp.f.layernorm_bw(out_grad, inp, gamma, beta, vars, means)
+        return inp_grad, gamma_grad, betta_grad
       #   END ASSIGN3_2
 
 

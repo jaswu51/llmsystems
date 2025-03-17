@@ -45,18 +45,57 @@ __global__ void ker_layer_norm(T *ln_res, T *vars, T *means, const T *inp,
   // 3. Compute layernorm result with reinterpret_cast by casting to float4 for speedup
   
   // Step 1
-  float l_sum = 0;
-  const float4 *inp_f4 = reinterpret_cast<const float4 *>(inp) + blockIdx.x * hidden_size;  
+
+  float l_sum = 0;  
+  float l_sum_sq = 0;
+
+  const float4 *inp_f4 = reinterpret_cast<const float4 *>(inp) + blockIdx.x * hidden_size; 
+
+  // do it for each thread, grid-stride loop
   for (uint idx = threadIdx.x; idx < hidden_size; idx += blockDim.x) {
     float4 val = inp_f4[idx];
     l_sum += val.x + val.y + val.z + val.w;
+    l_sum_sq += val.x * val.x + val.y * val.y + val.z * val.z + val.w * val.w;
   }
 
-  // Step 2
+  float mean_dim = float(hidden_size) * 4.f;
+  float reduce_val[2] = {l_sum, l_sum_sq};
+  blockReduce<ReduceType::kSum, 2>(reduce_val);
+
+  // Step 2 
+  __shared__ float s_mean, s_var;
+  if (threadIdx.x == 0) {
+    s_mean = reduce_val[0] / mean_dim;
+    if (means != nullptr) {
+      means[blockIdx.x] = s_mean;
+    }
+    s_var = reduce_val[1] / mean_dim - s_mean * s_mean + LN_EPSILON;
+    vars[blockIdx.x] = s_var;
+    
+  }
+  __syncthreads();
+  float inv_l_std = rsqrtf(s_var);
+
 
   // Step 3
+  float4 *ln_res_f4 = reinterpret_cast<float4 *>(ln_res) + blockIdx.x * hidden_size;
+  const float4 *scale_f4 = reinterpret_cast<const float4 *>(scale);
+  const float4 *bias_f4 = reinterpret_cast<const float4 *>(bias);
   
-  assert(false && "Not Implemented");
+  for (uint idx = threadIdx.x; idx < hidden_size; idx += blockDim.x) {
+    float4 val = inp_f4[idx];
+    float4 s = scale_f4[idx];
+    float4 b = bias_f4[idx];
+    
+    float4 result;
+    result.x = s.x * ((val.x - s_mean) * inv_l_std) + b.x;
+    result.y = s.y * ((val.y - s_mean) * inv_l_std) + b.y;
+    result.z = s.z * ((val.z - s_mean) * inv_l_std) + b.z;
+    result.w = s.w * ((val.w - s_mean) * inv_l_std) + b.w;
+    
+    ln_res_f4[idx] = result;
+  }
+  return;
   /// END ASSIGN3_2
 }
 
@@ -159,16 +198,13 @@ __global__ void ker_ln_bw_dgamma_dbetta(T *gamma_grad, T *betta_grad,
                                         const T *betta, const T *vars,
                                         const T *means, int rows, int width) {
 
+
   /// BEGIN ASSIGN3_2
   /// TODO
   // Hints:
   // 1. Compute the partial gradients by looping across inp rows
   // 2. Store the partial gradients in the shared memory arrays
   // 3. Compute the reduce sum of the shared memory arrays with g.shfl_down
-  //      -> More hints about `g.shfl_down`:
-  //      -> https://developer.nvidia.com/blog/cooperative-groups/#:~:text=Using%20thread_block_tile%3A%3Ashfl_down()%20to%20simplify%20our%20warp%2Dlevel%20reduction%20does%20benefit%20our%20code%3A%20it%20simplifies%20it%20and%20eliminates%20the%20need%20for%20shared%20memory
-  //      -> The highlighted line gives you a conceptual understanding of what the g.shfl_down is doing. Usually, the threads inside a block need to load everything to shared memory and work together to reduce the result (like what you have implemented in the hw1 for reduce function). 
-  //      -> Now g.shfl_down helps you do so without consuming any shared memory. g.shfl_down makes it more efficient.
   // 4. Assign the final result to the correct position in the global output
 
   __shared__ float betta_buffer[TILE_DIM][TILE_DIM];
@@ -178,14 +214,38 @@ __global__ void ker_ln_bw_dgamma_dbetta(T *gamma_grad, T *betta_grad,
   cg::thread_block_tile<TILE_DIM> g = cg::tiled_partition<TILE_DIM>(b);
 
   // Step 1
+  int idx = blockIdx.x * blockDim.x + threadIdx.x;
+  float beta_grad_partial = 0;
+  float gamma_grad_partial = 0;
+  float grad_output, input_val;
+  if (idx< width){
+    for (int i = threadIdx.y; i < rows; i += TILE_DIM) {
+      grad_output = out_grad[i * width + idx];
+      input_val = inp[i * width + idx];
+      float normalized_x = (input_val - means[i]) * rsqrtf(vars[i]);
+      beta_grad_partial += grad_output;
+      gamma_grad_partial += normalized_x * grad_output;
+    }
+  }
 
   // Step 2
-  
+  betta_buffer[threadIdx.x][threadIdx.y] = beta_grad_partial;
+  gamma_buffer[threadIdx.x][threadIdx.y] = gamma_grad_partial;
+  __syncthreads();
   // Step 3
-  
+  float beta_sum = betta_buffer[threadIdx.y][threadIdx.x];
+  float gamma_sum = gamma_buffer[threadIdx.y][threadIdx.x];
+  __syncthreads();
+  for (int i = 1; i < TILE_DIM; i<<=1) {
+    beta_sum += g.shfl_down(beta_sum, i);
+    gamma_sum += g.shfl_down(gamma_sum, i);
+  }
   // Step 4
-
-  assert(false && "Not Implemented");
+  int pos = blockIdx.x * TILE_DIM + threadIdx.y;
+  if (threadIdx.x == 0 && idx < width) {
+    betta_grad[pos] = beta_sum;
+    gamma_grad[pos] = gamma_sum;
+  }
   /// END ASSIGN3_2
 }
 
@@ -224,6 +284,7 @@ __global__ void ker_ln_bw_dinp(T *inp_grad, const T *out_grad, const T *inp,
                                const T *gamma, const T *betta, const T *vars,
                                const T *means, int hidden_dim) {
   
+  
   /// BEGIN ASSIGN3_2
   /// TODO
   // Hints:
@@ -232,17 +293,71 @@ __global__ void ker_ln_bw_dinp(T *inp_grad, const T *out_grad, const T *inp,
   // 3. Compute reduce sum for dxhat and dxhat*xhat with blockReduce
   // 4. Compute final gradient
   
-  // Step 1
+  // Step 1: Process output gradients and apply gamma scaling
+  float4 dxhat, xhat;
+  float vars_f;
+  if (threadIdx.x < hidden_dim) {
+    // Load output gradients and multiply by gamma
+    dxhat = reinterpret_cast<const float4 *>(out_grad)[blockIdx.x * hidden_dim + threadIdx.x];
+    float4 gamma_f4 = reinterpret_cast<const float4 *>(gamma)[threadIdx.x];
+    
+    // Apply gamma scaling to each element
+    dxhat.x *= gamma_f4.x;
+    dxhat.y *= gamma_f4.y;
+    dxhat.z *= gamma_f4.z;
+    dxhat.w *= gamma_f4.w;
  
-  // Step 2
-   
-  // Step 3
- 
-  // Step 4
+  // Step 2: Compute normalized inputs
+    // Load input and calculate normalized values
+    xhat = reinterpret_cast<const float4 *>(inp)[blockIdx.x * hidden_dim + threadIdx.x];
+    float mean_f = means[blockIdx.x];
+    vars_f = vars[blockIdx.x];
+    
+    // Normalization: (x - mean) / sqrt(variance)
+    xhat.x = (xhat.x - mean_f) * rsqrtf(vars_f);
+    xhat.y = (xhat.y - mean_f) * rsqrtf(vars_f);
+    xhat.z = (xhat.z - mean_f) * rsqrtf(vars_f);
+    xhat.w = (xhat.w - mean_f) * rsqrtf(vars_f);
+  }
   
-  assert(false && "Not Implemented");
+  // Step 3: Calculate block-wide reduction statistics
+  float reduce_val[2] = {0.f, 0.f};
+  if (threadIdx.x < hidden_dim) {
+    // Sum of gradients and dot product of gradients with normalized inputs
+    reduce_val[0] = dxhat.x + dxhat.y + dxhat.z + dxhat.w;
+    reduce_val[1] = dxhat.x * xhat.x + dxhat.y * xhat.y + dxhat.z * xhat.z + dxhat.w * xhat.w;
+  }
+  
+  // Perform reduction sum
+  blockReduce<ReduceType::kSum, 2>(reduce_val);
+  __syncthreads();
+  
+  // Store reduction results in shared memory
+  __shared__ float s_sum_dxhat, s_sum_dxhat_xhat;
+  if (threadIdx.x == 0) {
+    float mean_dim = hidden_dim * 4;
+    s_sum_dxhat = reduce_val[0] / mean_dim;
+    s_sum_dxhat_xhat = reduce_val[1] / mean_dim;
+  }
+  __syncthreads();
+  
+  // Step 4: Compute final input gradients
+  if (threadIdx.x >= hidden_dim) {
+    return;
+  }
+  
+  // Calculate final gradients using LayerNorm gradient formula
+  dxhat.x = (dxhat.x - (s_sum_dxhat + xhat.x * s_sum_dxhat_xhat)) * rsqrtf(vars_f);
+  dxhat.y = (dxhat.y - (s_sum_dxhat + xhat.y * s_sum_dxhat_xhat)) * rsqrtf(vars_f);
+  dxhat.z = (dxhat.z - (s_sum_dxhat + xhat.z * s_sum_dxhat_xhat)) * rsqrtf(vars_f);
+  dxhat.w = (dxhat.w - (s_sum_dxhat + xhat.w * s_sum_dxhat_xhat)) * rsqrtf(vars_f);
+  
+  // Write back results
+  reinterpret_cast<float4 *>(inp_grad)[blockIdx.x * hidden_dim + threadIdx.x] = dxhat;
+
   /// END ASSIGN3_2
 }
+
 extern "C" {
 void launch_layernorm_bw(float *gamma_grad, float *betta_grad, float *inp_grad,
                          const float *out_grad, const float *inp, const float *gamma,

@@ -139,20 +139,20 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
         # derivative of the current tensor
         grad = gradients.get(v.unique_id)
-
         # chain rule to propogate to parents
         if not v.is_leaf():
             for parent, chain_deriv in v.chain_rule(grad):
                 if parent.unique_id in gradients:
-                    gradients[parent.unique_id] += chain_deriv
+                    gradients[parent.unique_id] += 0.0 +chain_deriv
                 else:
-                    gradients[parent.unique_id] = chain_deriv
-
+                    gradients[parent.unique_id] = 0.0 + chain_deriv
+        
         # only accumulate derivatives for leaf nodes 
         if v.is_leaf():
             v.accumulate_derivative(grad)
         
         # END ASSIGN1_1
+
 
 @dataclass
 class Context:
