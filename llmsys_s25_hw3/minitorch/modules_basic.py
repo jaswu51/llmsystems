@@ -189,3 +189,23 @@ class LayerNorm1d(Module):
         x_norm = (x - mean.view(batch, 1)) / ((var + self.eps) ** 0.5).view(batch, 1)
         return self.weights.value.view(1, dim) * x_norm + self.bias.value.view(1, dim)
         ### END YOUR SOLUTION
+
+class LayerNorm(Module):
+    def __init__(self, dim: int, backend: TensorBackend):
+        super().__init__()
+
+        self.gamma = Parameter(zeros((dim,), backend=backend))
+        self.beta = Parameter(zeros((dim,), backend=backend))
+    
+    def forward(self, x: Tensor) -> Tensor:
+        return x.layernorm(self.gamma.value, self.beta.value)
+    
+class Attn_Softmax(Module):
+    def __init__(self, mask: Tensor, backend: TensorBackend):
+        super().__init__()
+
+        self.mask = mask
+    
+    def forward(self, x: Tensor) -> Tensor:
+        return x.attn_softmax(self.mask)
+    

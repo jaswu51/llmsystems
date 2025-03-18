@@ -5,7 +5,9 @@ from .modules_basic import (
     Embedding,
     Dropout,
     LayerNorm1d,
-    Linear
+    LayerNorm,
+    Linear,
+    Attn_Softmax
 )
 from .tensor_ops import TensorBackend
 from .nn import (
@@ -22,7 +24,7 @@ datatype = np.float32
 
 
 class MultiHeadAttention(Module):
-    def __init__(self, n_embd: int, n_head: int, causal: bool=True, p_dropout: float=0.1, bias: bool=True, backend: TensorBackend=None):
+    def __init__(self, n_embd: int, n_head: int, causal: bool=True, p_dropout: float=0.1, bias: bool=True, backend: TensorBackend=None,use_fused_kernel: bool=False):
         super().__init__()
         """Implements Multi-Head Attention as described in "Attention Is All You Need"
 
@@ -45,6 +47,7 @@ class MultiHeadAttention(Module):
         self.n_head    = n_head
         self.causal    = causal
         self.attn_hidden_dim = n_embd // n_head
+        self.use_fused_kernel = use_fused_kernel
 
         ### BEGIN YOUR SOLUTION
         self.q_projection = Linear(n_embd, n_embd, bias=bias, backend=backend)
@@ -118,9 +121,16 @@ class MultiHeadAttention(Module):
         scale = 1.0 / (self.attn_hidden_dim ** 0.5)
         q = q * scale
         attn_scores = q @ kT
-        if self.causal:
-            mask = self.create_causal_mask(queries_len)
-            attn_scores = attn_scores + mask
+        if self.use_fused_kernel:
+            if self.causal:
+                mask = self.create_causal_mask(queries_len)
+            else:
+                mask = None
+            attn_scores = Attn_Softmax(mask, backend=self.backend).forward(attn_scores)
+        else:
+            if self.causal:
+                mask = self.create_causal_mask(queries_len)
+                attn_scores = attn_scores + mask
         attn_scores = softmax(attn_scores,dim=3)
         result = attn_scores @ v
         result = result.permute(0, 2, 1, 3).contiguous()
@@ -194,7 +204,7 @@ class FeedForward(Module):
     
 
 class TransformerLayer(Module):
-    def __init__(self, n_embd: int, n_head: int, p_dropout: float=0.1, ln_eps: float=1e-5, bias: bool=True, backend: TensorBackend=None):
+    def __init__(self, n_embd: int, n_head: int, p_dropout: float=0.1, ln_eps: float=1e-5, bias: bool=True, backend: TensorBackend=None,use_fused_kernel: bool=False):
         super().__init__()
         """A Transformer Layer in a Pre-LN Transformer.
 
@@ -211,13 +221,18 @@ class TransformerLayer(Module):
             attention : MultiHeadAttention layer
             ff : FeedForward layer
         """
+        self.use_fused_kernel = use_fused_kernel
+        
         ### BEGIN YOUR SOLUTION
-        self.ln_1 = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
-        self.ln_2 = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
         self.attention = MultiHeadAttention(n_embd, n_head, p_dropout=p_dropout, bias=bias, backend=backend)
         self.ff = FeedForward(n_embd, p_dropout=p_dropout, bias=bias, backend=backend)
         ### END YOUR SOLUTION
-
+        if self.use_fused_kernel:
+            self.ln_1 = LayerNorm(n_embd, backend=backend)
+            self.ln_2 = LayerNorm(n_embd, backend=backend)
+        else:
+            self.ln_1 = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
+            self.ln_2 = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
     def forward(self, x):
         """The forward function of a Transformer Layer for a Pre-LN Transformer.
         
@@ -255,7 +270,8 @@ class DecoderLM(Module):
         p_dropout: float=0.1,
         ln_eps: float=1e-5, 
         bias: bool=True,
-        backend: TensorBackend=None
+        backend: TensorBackend=None,
+        use_fused_kernel: bool=False
     ):
         super().__init__()
         """A Full Decoder-only Pre-LN Transformer with 4 Transformer Layers.
@@ -283,6 +299,7 @@ class DecoderLM(Module):
         self.backend             = backend
         self.n_embd              = n_embd
         self.n_vocab             = n_vocab
+        self.use_fused_kernel    = use_fused_kernel
         ### BEGIN YOUR SOLUTION
         self.token_embeddings    = Embedding(n_vocab, n_embd, backend=backend)
         self.position_embeddings = Embedding(n_positions, n_embd, backend=backend)
@@ -291,9 +308,13 @@ class DecoderLM(Module):
         self.t_layer_3           = TransformerLayer(n_embd, n_head, p_dropout, ln_eps, bias, backend)
         self.t_layer_4           = TransformerLayer(n_embd, n_head, p_dropout, ln_eps, bias, backend)
         self.dropout             = Dropout(p_dropout)
-        self.ln                  = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
         self.lm_head             = Linear(n_embd, n_vocab, bias=bias, backend=backend)
         ### END YOUR SOLUTION
+        if self.use_fused_kernel:
+            self.ln = LayerNorm(n_embd, backend=backend)
+        else:
+            self.ln = LayerNorm1d(n_embd, eps=ln_eps, backend=backend)
+        
     
     def forward(self, idx):
         """A Forward pass of a Decoder-only Transformer Language model.

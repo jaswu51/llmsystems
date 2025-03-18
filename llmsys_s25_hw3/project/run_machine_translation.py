@@ -536,7 +536,7 @@ def backup_checkpoint(checkpoint_path, max_backups=3):
 
 def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
          model_max_length=40,
-         n_epochs=20,
+         n_epochs=1,
          batch_size=128,#128
          learning_rate=0.02,
          samples_per_epoch=20000,#20000
@@ -574,7 +574,8 @@ def main(dataset_name='bbaaaa/iwslt14-de-en-preprocess',
         # 'n_layer'     : 4,    # n_layer
         'p_dropout': 0.1,  # x_pdrop
         'ln_eps': 1e-5,  # layer_norm_epsilon
-        'backend': backend
+        'backend': backend,
+        'use_fused_kernel': False
     }
 
     model = DecoderLM(**config)
