@@ -1,0 +1,563 @@
+
+
+
+{
+    "data_size": {
+        "train": 97976,
+        "validation": 4512,
+        "test": 100
+    }
+}
+Starting training from scratch
+Forward: 3.486859083175659
+Backward: 10.208966732025146
+Opt.step: 0.43204736709594727
+Forward: 3.0130789279937744
+Backward: 8.680050611495972
+Opt.step: 0.4465494155883789
+Forward: 3.305575370788574
+Backward: 8.88578176498413
+Opt.step: 0.43778443336486816
+Forward: 2.87343692779541
+Backward: 8.53245210647583
+Opt.step: 0.4117581844329834
+Forward: 2.8938422203063965
+Backward: 8.492729902267456
+Opt.step: 0.46633052825927734
+Forward: 2.9934439659118652
+Backward: 8.17980170249939
+Opt.step: 0.4246671199798584
+Forward: 2.7410032749176025
+Backward: 8.452338457107544
+Opt.step: 0.40958404541015625
+Forward: 2.8291685581207275
+Backward: 8.286726236343384
+Opt.step: 0.4106433391571045
+Forward: 2.724694013595581
+Backward: 8.534183979034424
+Opt.step: 0.4432797431945801
+Forward: 2.6668901443481445
+Backward: 8.07615852355957
+Opt.step: 0.4210834503173828
+Forward: 2.6588876247406006
+Backward: 8.353609561920166
+Opt.step: 0.44818949699401855
+Forward: 2.7694528102874756
+Backward: 8.720824241638184
+Opt.step: 0.41153812408447266
+Forward: 2.889369487762451
+Backward: 8.377168416976929
+Opt.step: 0.4458963871002197
+Forward: 2.8879075050354004
+Backward: 8.479973554611206
+Opt.step: 0.43181848526000977
+Forward: 2.907944917678833
+Backward: 8.67730712890625
+Opt.step: 0.42943549156188965
+Forward: 2.877140522003174
+Backward: 8.529569625854492
+Opt.step: 0.4129159450531006
+Forward: 2.9853687286376953
+Backward: 8.48623538017273
+Opt.step: 0.44705963134765625
+Forward: 3.047806739807129
+Backward: 8.719373941421509
+Opt.step: 0.4351632595062256
+Forward: 3.0178661346435547
+Backward: 8.532003164291382
+Opt.step: 0.4222843647003174
+Forward: 2.855268955230713
+Backward: 8.437323808670044
+Opt.step: 0.41641736030578613
+Forward: 2.9146690368652344
+Backward: 8.429531812667847
+Opt.step: 0.4120039939880371
+Forward: 3.035144567489624
+Backward: 8.566726207733154
+Opt.step: 0.4127161502838135
+Forward: 2.9688191413879395
+Backward: 8.59924840927124
+Opt.step: 0.411937952041626
+Forward: 3.0286307334899902
+Backward: 8.233643770217896
+Opt.step: 0.4098036289215088
+Forward: 2.8408799171447754
+Backward: 8.115215539932251
+Opt.step: 0.4118947982788086
+Forward: 2.9326655864715576
+Backward: 8.269747734069824
+Opt.step: 0.4086284637451172
+Forward: 2.840751886367798
+Backward: 8.368107318878174
+Opt.step: 0.40987348556518555
+Forward: 2.982820749282837
+Backward: 8.277100086212158
+Opt.step: 0.414778470993042
+Forward: 2.8257248401641846
+Backward: 8.336335897445679
+Opt.step: 0.4103889465332031
+Forward: 2.8965089321136475
+Backward: 8.095831155776978
+Opt.step: 0.41242527961730957
+Forward: 2.83583402633667
+Backward: 8.36185622215271
+Opt.step: 0.4185652732849121
+Forward: 2.9421803951263428
+Backward: 8.20943570137024
+Opt.step: 0.5038321018218994
+Forward: 2.9342050552368164
+Backward: 8.279527425765991
+Opt.step: 0.4101226329803467
+Forward: 2.9890689849853516
+Backward: 8.332648992538452
+Opt.step: 0.4091014862060547
+Forward: 2.8957741260528564
+Backward: 8.887502193450928
+Opt.step: 0.4124307632446289
+Forward: 2.9040236473083496
+Backward: 8.712735891342163
+Opt.step: 0.4098525047302246
+Forward: 3.0925140380859375
+Backward: 8.321540117263794
+Opt.step: 0.4107213020324707
+Forward: 2.8577632904052734
+Backward: 8.778287887573242
+Opt.step: 0.4094061851501465
+Forward: 2.9903135299682617
+Backward: 8.52383279800415
+Opt.step: 0.4111778736114502
+Forward: 2.8948521614074707
+Backward: 8.47029733657837
+Opt.step: 0.4179985523223877
+Forward: 3.0607192516326904
+Backward: 8.472463607788086
+Opt.step: 0.4115722179412842
+Forward: 2.9908251762390137
+Backward: 8.835693836212158
+Opt.step: 0.4146137237548828
+Forward: 3.0468037128448486
+Backward: 8.354219436645508
+Opt.step: 0.4144420623779297
+Forward: 3.000256061553955
+Backward: 8.400975704193115
+Opt.step: 0.40983033180236816
+Forward: 3.1070640087127686
+Backward: 8.537786960601807
+Opt.step: 0.4088881015777588
+Forward: 3.07594895362854
+Backward: 8.929952144622803
+Opt.step: 0.4068126678466797
+Forward: 3.033083438873291
+Backward: 8.824023485183716
+Opt.step: 0.4153280258178711
+Forward: 3.1558034420013428
+Backward: 8.890252351760864
+Opt.step: 0.40933895111083984
+Forward: 3.025275230407715
+Backward: 9.43519115447998
+Opt.step: 0.4087696075439453
+Forward: 3.180635452270508
+Backward: 9.859969139099121
+Opt.step: 0.410581111907959
+Forward: 3.1444032192230225
+Backward: 9.7772216796875
+Opt.step: 0.41566014289855957
+Forward: 3.080253839492798
+Backward: 9.847315549850464
+Opt.step: 0.4292936325073242
+Forward: 3.496994972229004
+Backward: 9.717523097991943
+Opt.step: 0.4112727642059326
+Forward: 3.1498067378997803
+Backward: 9.197944164276123
+Opt.step: 0.4123568534851074
+Forward: 3.0553996562957764
+Backward: 9.544360637664795
+Opt.step: 0.4141194820404053
+Forward: 3.2263267040252686
+Backward: 9.305033206939697
+Opt.step: 0.4075777530670166
+Forward: 3.1808507442474365
+Backward: 9.532783508300781
+Opt.step: 0.40883731842041016
+Forward: 3.047856092453003
+Backward: 9.718099117279053
+Opt.step: 0.4100372791290283
+Forward: 3.021516799926758
+Backward: 8.918390274047852
+Opt.step: 0.4085390567779541
+Forward: 3.1023035049438477
+Backward: 9.603097438812256
+Opt.step: 0.4134817123413086
+Forward: 3.053636312484741
+Backward: 9.135188579559326
+Opt.step: 0.42722320556640625
+Forward: 3.119030714035034
+Backward: 9.693391799926758
+Opt.step: 0.4114105701446533
+Forward: 3.03940749168396
+Backward: 8.911694049835205
+Opt.step: 0.4078481197357178
+Forward: 3.032547950744629
+Backward: 9.414147138595581
+Opt.step: 0.41725945472717285
+Forward: 3.0546815395355225
+Backward: 8.850350618362427
+Opt.step: 0.4123995304107666
+Forward: 3.086778163909912
+Backward: 9.670067071914673
+Opt.step: 0.4190635681152344
+Forward: 3.1562340259552
+Backward: 8.824179887771606
+Opt.step: 0.4091935157775879
+Forward: 3.0662291049957275
+Backward: 9.379972457885742
+Opt.step: 0.4253358840942383
+Forward: 3.156956672668457
+Backward: 9.250808715820312
+Opt.step: 0.41104865074157715
+Forward: 3.063709020614624
+Backward: 8.29876184463501
+Opt.step: 0.4156479835510254
+Forward: 3.0262179374694824
+Backward: 9.442137718200684
+Opt.step: 0.4087178707122803
+Forward: 3.159578323364258
+Backward: 8.666849374771118
+Opt.step: 0.4120941162109375
+Forward: 2.937312126159668
+Backward: 9.255118608474731
+Opt.step: 0.40763306617736816
+Forward: 3.180143356323242
+Backward: 8.576377630233765
+Opt.step: 0.4219377040863037
+Forward: 3.0008292198181152
+Backward: 9.495624780654907
+Opt.step: 0.4130716323852539
+Forward: 3.1033310890197754
+Backward: 8.398688554763794
+Opt.step: 0.40845632553100586
+Forward: 2.949584722518921
+Backward: 9.52448844909668
+Opt.step: 0.40873193740844727
+Forward: 3.0994820594787598
+Backward: 8.600895166397095
+Opt.step: 0.4150869846343994
+Forward: 3.038558006286621
+Backward: 9.238551616668701
+Opt.step: 0.4113795757293701
+Forward: 3.153550624847412
+Backward: 9.03961992263794
+Opt.step: 0.4427788257598877
+Forward: 3.11181902885437
+Backward: 8.728997468948364
+Opt.step: 0.41745591163635254
+Forward: 3.05574631690979
+Backward: 9.72084093093872
+Opt.step: 0.4135253429412842
+Forward: 3.0424323081970215
+Backward: 9.133141279220581
+Opt.step: 0.4202570915222168
+Forward: 3.174504280090332
+Backward: 8.805546045303345
+Opt.step: 0.40880537033081055
+Forward: 3.128004550933838
+Backward: 8.65959620475769
+Opt.step: 0.4121837615966797
+Forward: 3.0852272510528564
+Backward: 9.34580945968628
+Opt.step: 0.4092569351196289
+Forward: 3.0343756675720215
+Backward: 8.643186330795288
+Opt.step: 0.4089977741241455
+Forward: 3.1002883911132812
+Backward: 8.714881181716919
+Opt.step: 0.4048500061035156
+Forward: 3.0294713973999023
+Backward: 9.168339490890503
+Opt.step: 0.41061949729919434
+Forward: 3.0331714153289795
+Backward: 9.49647045135498
+Opt.step: 0.40987563133239746
+Forward: 3.1118319034576416
+Backward: 8.766067266464233
+Opt.step: 0.4090850353240967
+Forward: 3.0977814197540283
+Backward: 8.700690507888794
+Opt.step: 0.4094111919403076
+Forward: 3.032705307006836
+Backward: 8.993494749069214
+Opt.step: 0.40764617919921875
+Forward: 3.050499677658081
+Backward: 8.733458995819092
+Opt.step: 0.40762901306152344
+Forward: 3.134841203689575
+Backward: 8.722566843032837
+Opt.step: 0.41307616233825684
+Forward: 3.122631549835205
+Backward: 9.531736612319946
+Opt.step: 0.4154791831970215
+Forward: 3.1381168365478516
+Backward: 8.991142511367798
+Opt.step: 0.4095492362976074
+Forward: 3.102389097213745
+Backward: 8.352314949035645
+Opt.step: 0.40859341621398926
+Forward: 2.996692180633545
+Backward: 9.196411371231079
+Opt.step: 0.4060511589050293
+Forward: 3.0252184867858887
+Backward: 9.264194250106812
+Opt.step: 0.4127979278564453
+Forward: 2.9746999740600586
+Backward: 9.386103868484497
+Opt.step: 0.41860103607177734
+Forward: 3.1464390754699707
+Backward: 8.510716199874878
+Opt.step: 0.4141225814819336
+Forward: 3.0724196434020996
+Backward: 9.027923107147217
+Opt.step: 0.41409969329833984
+Forward: 3.0750536918640137
+Backward: 8.836528062820435
+Opt.step: 0.4092071056365967
+Forward: 3.015711545944214
+Backward: 9.280860662460327
+Opt.step: 0.40845561027526855
+Forward: 3.032557487487793
+Backward: 9.028219223022461
+Opt.step: 0.4099693298339844
+Forward: 3.1234805583953857
+Backward: 9.351582288742065
+Opt.step: 0.4134798049926758
+Forward: 3.1321816444396973
+Backward: 8.731112003326416
+Opt.step: 0.4075205326080322
+Forward: 3.0480692386627197
+Backward: 9.023916006088257
+Opt.step: 0.4325833320617676
+Forward: 3.0969860553741455
+Backward: 9.466739892959595
+Opt.step: 0.42495012283325195
+Forward: 3.1913585662841797
+Backward: 9.14171576499939
+Opt.step: 0.4234507083892822
+Forward: 3.1221258640289307
+Backward: 9.067768096923828
+Opt.step: 0.41988110542297363
+Forward: 3.16088604927063
+Backward: 9.744653224945068
+Opt.step: 0.4247150421142578
+Forward: 3.112424612045288
+Backward: 9.359745025634766
+Opt.step: 0.4085872173309326
+Forward: 3.1675491333007812
+Backward: 9.72491455078125
+Opt.step: 0.5079855918884277
+Forward: 3.1118946075439453
+Backward: 9.48376989364624
+Opt.step: 0.41692042350769043
+Forward: 3.226534128189087
+Backward: 9.824302911758423
+Opt.step: 0.43503475189208984
+Forward: 3.238098382949829
+Backward: 10.12352204322815
+Opt.step: 0.4512522220611572
+Forward: 3.3909354209899902
+Backward: 9.776661396026611
+Opt.step: 0.45281267166137695
+Forward: 3.168494939804077
+Backward: 9.743870735168457
+Opt.step: 0.42870187759399414
+Forward: 3.2397005558013916
+Backward: 9.494702577590942
+Opt.step: 0.4314284324645996
+Forward: 3.1689834594726562
+Backward: 9.040631294250488
+Opt.step: 0.42864370346069336
+Forward: 3.1150083541870117
+Backward: 9.323789596557617
+Opt.step: 0.41907644271850586
+Forward: 3.0820252895355225
+Backward: 9.176876306533813
+Opt.step: 0.41815662384033203
+Forward: 3.146693468093872
+Backward: 8.99333906173706
+Opt.step: 0.429473876953125
+Forward: 3.1653265953063965
+Backward: 9.496858358383179
+Opt.step: 0.415050745010376
+Forward: 3.0780270099639893
+Backward: 9.22676968574524
+Opt.step: 0.415266752243042
+Forward: 3.011833429336548
+Backward: 9.508685111999512
+Opt.step: 0.4169318675994873
+Forward: 3.070683479309082
+Backward: 8.86311936378479
+Opt.step: 0.4181692600250244
+Forward: 3.162583589553833
+Backward: 9.015756368637085
+Opt.step: 0.4197242259979248
+Forward: 3.066608428955078
+Backward: 8.787312030792236
+Opt.step: 0.4224703311920166
+Forward: 3.088742733001709
+Backward: 9.491687536239624
+Opt.step: 0.4186868667602539
+Forward: 3.169173240661621
+Backward: 9.639596700668335
+Opt.step: 0.41563940048217773
+Forward: 3.0508108139038086
+Backward: 9.689447164535522
+Opt.step: 0.41031718254089355
+Forward: 3.075462818145752
+Backward: 9.756771087646484
+Opt.step: 0.43389129638671875
+Forward: 3.107278823852539
+Backward: 9.59917688369751
+Opt.step: 0.43889617919921875
+Forward: 3.1830708980560303
+Backward: 9.613520383834839
+Opt.step: 0.42350029945373535
+Forward: 3.1770224571228027
+Backward: 9.518306732177734
+Opt.step: 0.4321749210357666
+Forward: 3.0906262397766113
+Backward: 9.640384197235107
+Opt.step: 0.41669249534606934
+Forward: 3.09145450592041
+Backward: 9.493170261383057
+Opt.step: 0.48043036460876465
+Forward: 3.172736883163452
+Backward: 9.71844482421875
+Opt.step: 0.4170651435852051
+Forward: 3.0701746940612793
+Backward: 9.741404056549072
+Opt.step: 0.4486691951751709
+Forward: 3.1856956481933594
+Backward: 9.747525691986084
+Opt.step: 0.43132948875427246
+Forward: 3.164146661758423
+Backward: 9.604289770126343
+Opt.step: 0.4154689311981201
+Forward: 3.085118532180786
+Backward: 9.866737604141235
+Opt.step: 0.43338799476623535
+Forward: 3.1836888790130615
+Backward: 9.737282752990723
+Opt.step: 0.4254570007324219
+Forward: 3.2084898948669434
+Backward: 9.132181644439697
+Opt.step: 0.41944432258605957
+Forward: 3.126173734664917
+Backward: 9.583976030349731
+Opt.step: 0.4224715232849121
+Forward: 3.0906851291656494
+Backward: 9.359984874725342
+Opt.step: 0.42127513885498047
+Forward: 3.1184446811676025
+Backward: 9.914005517959595
+Opt.step: 0.433013916015625
+Forward: 3.4936881065368652
+Backward: 9.736570596694946
+Opt.step: 0.42945098876953125
+Forward: 3.2600886821746826
+Backward: 9.630213975906372
+Opt.step: 0.44170117378234863
+Forward: 3.1298067569732666
+Backward: 9.781448602676392
+Opt.step: 0.42690587043762207
+Forward: 3.2143027782440186
+Backward: 9.884896993637085
+Opt.step: 0.43616795539855957
+Forward: 3.285576105117798
+Backward: 9.671602964401245
+Opt.step: 0.4310786724090576
+Forward: 3.2574734687805176
+Backward: 9.715413570404053
+Opt.step: 0.43189430236816406
+Forward: 0.772723913192749
+Backward: 2.652656316757202
+Opt.step: 0.48058199882507324
+Epoch 0: Validation Loss = 4.509520530700684
+Epoch 0: {'bleu': 7.467020149188989}
+
+Preparing to save checkpoint:
+Saving parameter token_embeddings.weights: shape=(10000, 256)
+Saving parameter position_embeddings.weights: shape=(40, 256)
+Saving parameter t_layer_1.attention.q_projection.weights: shape=(256, 256)
+Saving parameter t_layer_1.attention.q_projection.bias: shape=(256,)
+Saving parameter t_layer_1.attention.k_projection.weights: shape=(256, 256)
+Saving parameter t_layer_1.attention.k_projection.bias: shape=(256,)
+Saving parameter t_layer_1.attention.v_projection.weights: shape=(256, 256)
+Saving parameter t_layer_1.attention.v_projection.bias: shape=(256,)
+Saving parameter t_layer_1.attention.out_projection.weights: shape=(256, 256)
+Saving parameter t_layer_1.attention.out_projection.bias: shape=(256,)
+Saving parameter t_layer_1.ff.linear_in.weights: shape=(256, 256)
+Saving parameter t_layer_1.ff.linear_in.bias: shape=(256,)
+Saving parameter t_layer_1.ff.linear_out.weights: shape=(256, 256)
+Saving parameter t_layer_1.ff.linear_out.bias: shape=(256,)
+Saving parameter t_layer_1.ln_1.weights: shape=(256,)
+Saving parameter t_layer_1.ln_1.bias: shape=(256,)
+Saving parameter t_layer_1.ln_2.weights: shape=(256,)
+Saving parameter t_layer_1.ln_2.bias: shape=(256,)
+Saving parameter t_layer_2.attention.q_projection.weights: shape=(256, 256)
+Saving parameter t_layer_2.attention.q_projection.bias: shape=(256,)
+Saving parameter t_layer_2.attention.k_projection.weights: shape=(256, 256)
+Saving parameter t_layer_2.attention.k_projection.bias: shape=(256,)
+Saving parameter t_layer_2.attention.v_projection.weights: shape=(256, 256)
+Saving parameter t_layer_2.attention.v_projection.bias: shape=(256,)
+Saving parameter t_layer_2.attention.out_projection.weights: shape=(256, 256)
+Saving parameter t_layer_2.attention.out_projection.bias: shape=(256,)
+Saving parameter t_layer_2.ff.linear_in.weights: shape=(256, 256)
+Saving parameter t_layer_2.ff.linear_in.bias: shape=(256,)
+Saving parameter t_layer_2.ff.linear_out.weights: shape=(256, 256)
+Saving parameter t_layer_2.ff.linear_out.bias: shape=(256,)
+Saving parameter t_layer_2.ln_1.weights: shape=(256,)
+Saving parameter t_layer_2.ln_1.bias: shape=(256,)
+Saving parameter t_layer_2.ln_2.weights: shape=(256,)
+Saving parameter t_layer_2.ln_2.bias: shape=(256,)
+Saving parameter t_layer_3.attention.q_projection.weights: shape=(256, 256)
+Saving parameter t_layer_3.attention.q_projection.bias: shape=(256,)
+Saving parameter t_layer_3.attention.k_projection.weights: shape=(256, 256)
+Saving parameter t_layer_3.attention.k_projection.bias: shape=(256,)
+Saving parameter t_layer_3.attention.v_projection.weights: shape=(256, 256)
+Saving parameter t_layer_3.attention.v_projection.bias: shape=(256,)
+Saving parameter t_layer_3.attention.out_projection.weights: shape=(256, 256)
+Saving parameter t_layer_3.attention.out_projection.bias: shape=(256,)
+Saving parameter t_layer_3.ff.linear_in.weights: shape=(256, 256)
+Saving parameter t_layer_3.ff.linear_in.bias: shape=(256,)
+Saving parameter t_layer_3.ff.linear_out.weights: shape=(256, 256)
+Saving parameter t_layer_3.ff.linear_out.bias: shape=(256,)
+Saving parameter t_layer_3.ln_1.weights: shape=(256,)
+Saving parameter t_layer_3.ln_1.bias: shape=(256,)
+Saving parameter t_layer_3.ln_2.weights: shape=(256,)
+Saving parameter t_layer_3.ln_2.bias: shape=(256,)
+Saving parameter t_layer_4.attention.q_projection.weights: shape=(256, 256)
+Saving parameter t_layer_4.attention.q_projection.bias: shape=(256,)
+Saving parameter t_layer_4.attention.k_projection.weights: shape=(256, 256)
+Saving parameter t_layer_4.attention.k_projection.bias: shape=(256,)
+Saving parameter t_layer_4.attention.v_projection.weights: shape=(256, 256)
+Saving parameter t_layer_4.attention.v_projection.bias: shape=(256,)
+Saving parameter t_layer_4.attention.out_projection.weights: shape=(256, 256)
+Saving parameter t_layer_4.attention.out_projection.bias: shape=(256,)
+Saving parameter t_layer_4.ff.linear_in.weights: shape=(256, 256)
+Saving parameter t_layer_4.ff.linear_in.bias: shape=(256,)
+Saving parameter t_layer_4.ff.linear_out.weights: shape=(256, 256)
+Saving parameter t_layer_4.ff.linear_out.bias: shape=(256,)
+Saving parameter t_layer_4.ln_1.weights: shape=(256,)
+Saving parameter t_layer_4.ln_1.bias: shape=(256,)
+Saving parameter t_layer_4.ln_2.weights: shape=(256,)
+Saving parameter t_layer_4.ln_2.bias: shape=(256,)
+Saving parameter lm_head.weights: shape=(256, 10000)
+Saving parameter lm_head.bias: shape=(10000,)
+Saving parameter ln.weights: shape=(256,)
+Saving parameter ln.bias: shape=(256,)
+
+Saved 70 parameter states
+
+
+real    38m29.418s
+user    27m55.650s
+sys     10m50.675s
