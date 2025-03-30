@@ -23,9 +23,6 @@ from torch.multiprocessing import Process
 from data_parallel.dataset import partition_dataset
 from utils import get_tokenizer, evaluate_bleu, save_grad_weights, collate_batch, evaluate_loss, generate, train
 
-import os
-os.environ['HUGGINGFACE_TOKEN']='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'
-
 PYTEST = False
 
 # ASSIGNMENT 4.1
