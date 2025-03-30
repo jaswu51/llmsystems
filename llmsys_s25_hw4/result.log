@@ -1,0 +1,77 @@
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ python -m pytest -l -v -k "a4_1_1"
+=============================================================== test session starts ================================================================
+platform linux -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /ocean/projects/cis240137p/ywuo/anaconda3/envs/hw4/bin/python
+cachedir: .pytest_cache
+rootdir: /jet/home/ywuo/llmsys_s25_hw4
+configfile: pytest.ini
+collecting ... 
+collected 34 items / 25 deselected / 9 selected                                                                                                    
+
+tests/test_data_parallel.py::test_data_partition[2-64] PASSED                                                                                [ 11%]
+tests/test_data_parallel.py::test_data_partition[2-128] PASSED                                                                               [ 22%]
+tests/test_data_parallel.py::test_data_partition[2-512] PASSED                                                                               [ 33%]
+tests/test_data_parallel.py::test_data_partition[4-64] PASSED                                                                                [ 44%]
+tests/test_data_parallel.py::test_data_partition[4-128] PASSED                                                                               [ 55%]
+tests/test_data_parallel.py::test_data_partition[4-512] PASSED                                                                               [ 66%]
+tests/test_data_parallel.py::test_data_partition[8-64] PASSED                                                                                [ 77%]
+tests/test_data_parallel.py::test_data_partition[8-128] PASSED                                                                               [ 88%]
+tests/test_data_parallel.py::test_data_partition[8-512] PASSED                                                                               [100%]
+
+========================================================= 9 passed, 25 deselected in 1.64s =========================================================
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ 
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ python -m pytest -l -v -k "a4_1_2"
+=============================================================== test session starts ================================================================
+platform linux -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /ocean/projects/cis240137p/ywuo/anaconda3/envs/hw4/bin/python
+cachedir: .pytest_cache
+rootdir: /jet/home/ywuo/llmsys_s25_hw4
+configfile: pytest.ini
+collected 34 items / 33 deselected / 1 selected                                                                                                    
+
+tests/test_data_parallel.py::test_gradient_accumulation PASSED                                                                               [100%]
+
+========================================================= 1 passed, 33 deselected in 2.09s =========================================================
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ python -m pytest -l -v -k "a4_2_1"
+=============================================================== test session starts ================================================================
+platform linux -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /ocean/projects/cis240137p/ywuo/anaconda3/envs/hw4/bin/python
+cachedir: .pytest_cache
+rootdir: /jet/home/ywuo/llmsys_s25_hw4
+configfile: pytest.ini
+collected 34 items / 30 deselected / 4 selected                                                                                                    
+
+tests/test_pipeline.py::test_clock_cycles_0 PASSED                                                                                           [ 25%]
+tests/test_pipeline.py::test_clock_cycles_1 PASSED                                                                                           [ 50%]
+tests/test_pipeline.py::test_split_module_0 PASSED                                                                                           [ 75%]
+tests/test_pipeline.py::test_split_module_1 PASSED                                                                                           [100%]
+
+========================================================= 4 passed, 30 deselected in 1.63s =========================================================
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ python -m pytest -l -v -k "a4_2_2"
+=============================================================== test session starts ================================================================
+platform linux -- Python 3.9.21, pytest-8.3.5, pluggy-1.5.0 -- /ocean/projects/cis240137p/ywuo/anaconda3/envs/hw4/bin/python
+cachedir: .pytest_cache
+rootdir: /jet/home/ywuo/llmsys_s25_hw4
+configfile: pytest.ini
+collected 34 items / 14 deselected / 20 selected                                                                                                   
+
+tests/test_pipeline.py::test_forward_0[1-1] PASSED                                                                                           [  5%]
+tests/test_pipeline.py::test_forward_0[1-16] PASSED                                                                                          [ 10%]
+tests/test_pipeline.py::test_forward_0[1-32] PASSED                                                                                          [ 15%]
+tests/test_pipeline.py::test_forward_0[1-64] PASSED                                                                                          [ 20%]
+tests/test_pipeline.py::test_forward_0[2-1] PASSED                                                                                           [ 25%]
+tests/test_pipeline.py::test_forward_0[2-16] PASSED                                                                                          [ 30%]
+tests/test_pipeline.py::test_forward_0[2-32] PASSED                                                                                          [ 35%]
+tests/test_pipeline.py::test_forward_0[2-64] PASSED                                                                                          [ 40%]
+tests/test_pipeline.py::test_forward_0[4-1] PASSED                                                                                           [ 45%]
+tests/test_pipeline.py::test_forward_0[4-16] PASSED                                                                                          [ 50%]
+tests/test_pipeline.py::test_forward_0[4-32] PASSED                                                                                          [ 55%]
+tests/test_pipeline.py::test_forward_0[4-64] PASSED                                                                                          [ 60%]
+tests/test_pipeline.py::test_forward_0[8-1] PASSED                                                                                           [ 65%]
+tests/test_pipeline.py::test_forward_0[8-16] PASSED                                                                                          [ 70%]
+tests/test_pipeline.py::test_forward_0[8-32] PASSED                                                                                          [ 75%]
+tests/test_pipeline.py::test_forward_0[8-64] PASSED                                                                                          [ 80%]
+tests/test_pipeline.py::test_forward_0[16-1] PASSED                                                                                          [ 85%]
+tests/test_pipeline.py::test_forward_0[16-16] PASSED                                                                                         [ 90%]
+tests/test_pipeline.py::test_forward_0[16-32] PASSED                                                                                         [ 95%]
+tests/test_pipeline.py::test_forward_0[16-64] PASSED                                                                                         [100%]
+
+======================================================== 20 passed, 14 deselected in 1.80s =========================================================
+(hw4) [ywuo@v006 llmsys_s25_hw4]$ 
